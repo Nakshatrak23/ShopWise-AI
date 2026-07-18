@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Intelligent Shopping Agent</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+      background: #f7f8fa;
+      color: #1f2328;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Nav ── */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 32px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-box {
+      width: 38px;
+      height: 38px;
+      background: #3b82d4;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-text {
+      font-size: 17px;
+      font-weight: 800;
+      color: #1f2328;
+      letter-spacing: -0.4px;
+    }
+
+    .brand-text span { color: #3b82d4; }
+
+    .nav-pill {
+      background: #eef3fb;
+      color: #3b82d4;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #57606a;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover { color: #3b82d4; }
+
+    .nav-cart {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #3b82d4;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: 8px;
+      cursor: default;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 52px 32px 44px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #eef3fb;
+      color: #3b82d4;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 0.4px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: #3b82d4;
+      border-radius: 50%;
+      animation: blink 1.8s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      font-weight: 800;
+      color: #1f2328;
+      line-height: 1.2;
+      letter-spacing: -0.6px;
+      max-width: 620px;
+      margin: 0 auto 16px;
+    }
+
+    .hero h1 span { color: #3b82d4; }
+
+    .hero p {
+      font-size: 15.5px;
+      color: #57606a;
+      max-width: 530px;
+      margin: 0 auto;
+      line-height: 1.75;
+    }
+
+    /* ── Stats Strip ── */
+    .stats-strip {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      padding: 18px 36px;
+      text-align: center;
+      border-right: 1px solid #e5e7eb;
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #3b82d4;
+      letter-spacing: -0.4px;
+    }
+
+    .stat-label {
+      font-size: 11.5px;
+      color: #57606a;
+      margin-top: 2px;
+    }
+
+    /* ── Feature Cards ── */
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      padding: 32px 32px 0;
+      flex-wrap: wrap;
+    }
+
+    .feat-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px 18px;
+      width: 172px;
+      text-align: center;
+    }
+
+    .feat-card:hover { border-color: #3b82d4; }
+
+    .feat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    .feat-icon.blue   { background: #eef3fb; }
+    .feat-icon.purple { background: #f3f0fc; }
+    .feat-icon.green  { background: #edfaf3; }
+    .feat-icon.amber  { background: #fef8ec; }
+    .feat-icon.rose   { background: #fef2f2; }
+    .feat-icon.teal   { background: #effafa; }
+
+    .feat-card h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1f2328;
+      margin-bottom: 5px;
+    }
+
+    .feat-card p {
+      font-size: 11.5px;
+      color: #57606a;
+      line-height: 1.55;
+    }
+
+    /* ── Main Chat ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 32px 0;
+    }
+
+    .chat-wrapper {
+      width: 100%;
+      max-width: 780px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #3b82d4 0%, #2563b0 100%);
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-avatar {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .chat-status {
+      font-size: 11.5px;
+      color: rgba(255,255,255,0.78);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #86efac;
+      border-radius: 50%;
+    }
+
+    .chat-header-right {
+      display: flex;
+      gap: 8px;
+    }
+
+    .header-tag {
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      letter-spacing: 0.3px;
+    }
+
+    #root {
+      width: 100%;
+      min-height: 560px;
+    }
+
+    /* ── Suggestions ── */
+    .suggestions {
+      padding: 24px 0 0;
+      max-width: 780px;
+      width: 100%;
+    }
+
+    .suggestions h4 {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #57606a;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 12px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 7px 15px;
+      font-size: 12.5px;
+      color: #57606a;
+      cursor: default;
+      line-height: 1.4;
+    }
+
+    .chip:hover {
+      border-color: #3b82d4;
+      color: #3b82d4;
+      background: #eef3fb;
+    }
+
+    /* ── Category Shelf ── */
+    .shelf {
+      max-width: 780px;
+      width: 100%;
+      margin-top: 28px;
+    }
+
+    .shelf h4 {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #57606a;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 12px;
+    }
+
+    .shelf-items {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .shelf-item {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1f2328;
+    }
+
+    .shelf-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      font-size: 11.5px;
+      color: #57606a;
+      padding: 22px 32px;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 36px;
+      background: #ffffff;
+    }
+
+    footer a { color: #3b82d4; text-decoration: none; }
+
+    @media (max-width: 620px) {
+      .nav-links, .nav-cart { display: none; }
+      .hero h1 { font-size: 26px; }
+      .stat { padding: 14px 20px; }
+      .feat-card { width: 145px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <header>
+    <div class="nav-brand">
+      <div class="logo-box">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+      </div>
+      <span class="brand-text">Shop<span>AI</span> Agent</span>
+      <span class="nav-pill">Powered by IBM watsonx</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Products</a></li>
+      <li><a href="#">Deals</a></li>
+      <li><a href="#">Orders</a></li>
+      <li><a href="#">Wishlist</a></li>
+    </ul>
+    <div class="nav-cart">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+      Cart
+    </div>
+  </header>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="hero-eyebrow">
+      <span class="live-dot"></span>
+      AI Shopping Agent · Live
+    </div>
+    <h1>Shop Smarter with Your <span>Intelligent</span> Assistant</h1>
+    <p>Discover products, compare prices, get personalised recommendations, track orders, and find the best deals — all through natural conversation, powered by IBM watsonx Orchestrate.</p>
+  </section>
+
+  <!-- ── Stats Strip ── -->
+  <div class="stats-strip">
+    <div class="stat">
+      <div class="stat-value">10M+</div>
+      <div class="stat-label">Products Indexed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">Real-time</div>
+      <div class="stat-label">Price Comparison</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">AI-driven</div>
+      <div class="stat-label">Personalisation</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">24 / 7</div>
+      <div class="stat-label">Shopping Support</div>
+    </div>
+  </div>
+
+  <!-- ── Feature Cards ── -->
+  <div class="features">
+    <div class="feat-card">
+      <div class="feat-icon blue">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+      <h3>Product Discovery</h3>
+      <p>Find exactly what you need with natural language search</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon purple">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7c5cd8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <h3>Price Comparison</h3>
+      <p>Compare prices across stores to get the best deal</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon green">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      </div>
+      <h3>Personalised Picks</h3>
+      <p>AI-curated recommendations based on your preferences</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon amber">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+      </div>
+      <h3>Order Tracking</h3>
+      <p>Get real-time updates on your deliveries</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon rose">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </div>
+      <h3>Deals & Offers</h3>
+      <p>Discover coupons, flash sales, and exclusive discounts</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon teal">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <h3>Shopping Support</h3>
+      <p>Instant help with returns, refunds, and queries</p>
+    </div>
+  </div>
+
+  <!-- ── Chat Section ── -->
+  <main class="main">
+    <div class="chat-wrapper">
+      <div class="chat-header">
+        <div class="chat-header-left">
+          <div class="chat-avatar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </div>
+          <div>
+            <div class="chat-name">Intelligent Shopping Agent</div>
+            <div class="chat-status"><span class="status-dot"></span> Online · Ready to shop</div>
+          </div>
+        </div>
+        <div class="chat-header-right">
+          <span class="header-tag">AI-Powered</span>
+          <span class="header-tag">IBM watsonx</span>
+        </div>
+      </div>
+      <!-- IBM watsonx Orchestrate chat mounts here -->
+      <div id="root"></div>
+    </div>
+
+    <!-- ── Prompt Suggestions ── -->
+    <div class="suggestions">
+      <h4>Try asking</h4>
+      <div class="chips">
+        <span class="chip">Find me the best noise-cancelling headphones under $200</span>
+        <span class="chip">Compare iPhone 15 vs Samsung Galaxy S24</span>
+        <span class="chip">What are today's best deals on laptops?</span>
+        <span class="chip">Track my order #ORD-48291</span>
+        <span class="chip">Recommend a gift for a coffee lover</span>
+        <span class="chip">Show me eco-friendly home products</span>
+        <span class="chip">What's the return policy for electronics?</span>
+        <span class="chip">Find running shoes for flat feet</span>
+      </div>
+    </div>
+
+    <!-- ── Category Shelf ── -->
+    <div class="shelf">
+      <h4>Popular Categories</h4>
+      <div class="shelf-items">
+        <div class="shelf-item"><span class="shelf-dot" style="background:#3b82d4"></span>Electronics</div>
+        <div class="shelf-item"><span class="shelf-dot" style="background:#7c5cd8"></span>Fashion</div>
+        <div class="shelf-item"><span class="shelf-dot" style="background:#16a34a"></span>Home &amp; Garden</div>
+        <div class="shelf-item"><span class="shelf-dot" style="background:#d97706"></span>Sports &amp; Outdoors</div>
+        <div class="shelf-item"><span class="shelf-dot" style="background:#dc2626"></span>Beauty &amp; Health</div>
+        <div class="shelf-item"><span class="shelf-dot" style="background:#0d9488"></span>Books &amp; Media</div>
+        <div class="shelf-item"><span class="shelf-dot" style="background:#e11d48"></span>Toys &amp; Games</div>
+        <div class="shelf-item"><span class="shelf-dot" style="background:#ea580c"></span>Grocery &amp; Food</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <p>Powered by <a href="https://www.ibm.com/products/watsonx-orchestrate" target="_blank">IBM watsonx Orchestrate</a> &nbsp;·&nbsp; Intelligent Shopping Agent &nbsp;·&nbsp; AI recommendations are for guidance only — always verify before purchase</p>
+    <p style="margin-top:6px; color:#a0aab4; font-size:10.5px;">Made with IBM Bob</p>
+  </footer>
+
+  <!-- ── IBM watsonx Orchestrate Agent Script ── -->
+  <script>
+    window.wxOConfiguration = {
+      orchestrationID: "380ffc3735fa40289540c39c0cbebef4_e921549a-6b52-41e6-a114-9b1caa38c956",
+      hostURL: "https://au-syd.watson-orchestrate.cloud.ibm.com",
+      rootElementID: "root",
+      deploymentPlatform: "ibmcloud",
+      crn: "crn:v1:bluemix:public:watsonx-orchestrate:au-syd:a/380ffc3735fa40289540c39c0cbebef4:e921549a-6b52-41e6-a114-9b1caa38c956::",
+      chatOptions: {
+        agentId: "12071882-624a-4b7b-a28f-ed56be2f3736"
+      }
+    };
+    setTimeout(function () {
+      var script = document.createElement('script');
+      script.src = window.wxOConfiguration.hostURL + '/wxochat/wxoLoader.js?embed=true';
+      script.addEventListener('load', function () {
+        wxoLoader.init();
+      });
+      document.head.appendChild(script);
+    }, 0);
+  </script>
+
+</body>
+</html>
